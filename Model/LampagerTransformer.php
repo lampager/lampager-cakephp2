@@ -1,4 +1,5 @@
 <?php
+
 use Lampager\Query\Query;
 use Lampager\Query\Select;
 use Lampager\Query\SelectOrUnionAll;
@@ -76,7 +77,7 @@ class LampagerTransformer
     }
 
     /**
-     * @param  Select $select
+     * @param  Select   $select
      * @return string[]
      */
     protected function compileWhere(Select $select)
@@ -89,7 +90,7 @@ class LampagerTransformer
     }
 
     /**
-     * @param  ConditionGroup $group
+     * @param  ConditionGroup     $group
      * @return \Generator<string, string>
      */
     protected function compileWhereGroup(ConditionGroup $group)
@@ -102,7 +103,7 @@ class LampagerTransformer
     }
 
     /**
-     * @param  Select $select
+     * @param  Select   $select
      * @return string[]
      */
     protected function compileOrderBy(Select $select)

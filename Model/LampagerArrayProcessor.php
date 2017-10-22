@@ -1,4 +1,5 @@
 <?php
+
 App::uses('Model', 'Model');
 
 use Lampager\ArrayProcessor;

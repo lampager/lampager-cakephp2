@@ -1,4 +1,5 @@
 <?php
+
 App::uses('ModelBehavior', 'Model');
 App::uses('LampagerPaginator', 'Lampager.Model');
 App::uses('LampagerArrayCursor', 'Lampager.Model');
@@ -10,12 +11,12 @@ class LampagerBehavior extends ModelBehavior
 {
     use HasProcessor;
 
-    /** LampagerArrayProcessor[] */
+    /** @var LampagerArrayProcessor[] */
     protected $processors;
 
-    public $mapMethods = array(
-        '/\b_findLampager\b/'  => 'findLampager',
-    );
+    public $mapMethods = [
+        '/\b_findLampager\b/' => 'findLampager',
+    ];
 
     /**
      * {@inheritdoc}

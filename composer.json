@@ -1,6 +1,6 @@
 {
-    "name": "lampager/lampager-cakephp",
-    "description": "Rapid pagination for CakePHP",
+    "name": "lampager/lampager-cakephp2",
+    "description": "Rapid pagination for CakePHP 2",
     "type": "cakephp-plugin",
     "license": "MIT",
     "authors": [
@@ -15,7 +15,7 @@
     ],
     "keywords": ["cakephp", "pagination", "paginator", "offset", "limit"],
     "require": {
-        "php": "^5.3 || ^7.0",
+        "php": "^5.6 || ^7.0",
         "composer/installers": "*",
         "lampager/lampager": "^0.1.0"
     },
