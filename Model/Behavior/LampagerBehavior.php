@@ -5,15 +5,9 @@ App::uses('LampagerPaginator', 'Lampager.Model');
 App::uses('LampagerArrayCursor', 'Lampager.Model');
 App::uses('LampagerArrayProcessor', 'Lampager.Model');
 
-use Lampager\Concerns\HasProcessor;
-
 class LampagerBehavior extends ModelBehavior
 {
-    use HasProcessor;
-
-    /** @var LampagerArrayProcessor[] */
-    protected $processors;
-
+    /** @var string[] */
     public $mapMethods = [
         '/\b_findLampager\b/' => 'findLampager',
     ];
@@ -23,7 +17,6 @@ class LampagerBehavior extends ModelBehavior
      */
     public function setup(Model $model, $config = [])
     {
-        $this->processors[$model->alias] = new LampagerArrayProcessor($model);
         $model->findMethods['lampager'] = true;
     }
 
@@ -50,38 +43,11 @@ class LampagerBehavior extends ModelBehavior
 
     protected function findLampagerBefore(Model $model, array $query = [], array $results = [])
     {
-        $cursor = isset($query['cursor']) ? $query['cursor'] : [];
-        $lampager = LampagerPaginator::fromQuery($model, $query);
-        $config = $lampager->configure(new LampagerArrayCursor($model, $cursor));
-
-        return [
-            'joins' => array_merge(
-                [
-                    [
-                        'type' => 'INNER',
-                        'table' => $lampager->transformer->transform($config),
-                        'alias' => LampagerPaginator::class,
-                        'conditions' => [
-                            LampagerPaginator::class . ".{$model->primaryKey} = {$model->alias}.{$model->primaryKey}",
-                        ],
-                    ],
-                ],
-                $query['joins'] ?: []
-            ),
-            'config' => $config,
-            'callbacks' => $query['callbacks'],
-            'fields' => $query['fields'],
-            'conditions' => null,
-            'group' => null,
-            'limit' => null,
-            'offset' => null,
-            'order' => null,
-            'page' => null,
-        ];
+        return LampagerPaginator::fromQuery($model, $query)->transformer->build(isset($query['cursor']) ? $query['cursor'] : []);
     }
 
     protected function findLampagerAfter(Model $model, array $query = [], array $results = [])
     {
-        return $this->processors[$model->alias]->process($query['config'], $results);
+        return LampagerArrayProcessor::create($model)->process($query['config'], $results);
     }
 }

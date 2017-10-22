@@ -10,6 +10,17 @@ class LampagerArrayProcessor extends ArrayProcessor
     /** @var Model */
     protected $model;
 
+    /**
+     * @return static
+     */
+    public static function create(Model $model)
+    {
+        return new static($model);
+    }
+
+    /**
+     * @param Model $model Model.
+     */
     public function __construct(Model $model)
     {
         $this->model = $model;

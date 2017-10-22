@@ -1,5 +1,8 @@
 <?php
 
+App::uses('LampagerPaginator', 'Lampager.Model');
+
+use Lampager\Cursor;
 use Lampager\Query\Query;
 use Lampager\Query\Select;
 use Lampager\Query\SelectOrUnionAll;
@@ -16,14 +19,50 @@ class LampagerTransformer
         $this->paginator = $paginator;
     }
 
+    /**
+     * Transform Query to CakePHP query.
+     *
+     * @param  Query $query Query.
+     * @return array        Options for Model::find.
+     */
     public function transform(Query $query)
     {
-        return $this->compileSelectOrUnionAll($query->selectOrUnionAll());
+        $model = $this->paginator->builder;
+        return [
+            'joins' => array_merge(
+                [
+                    [
+                        'type' => 'INNER',
+                        'table' => $this->compileSelectOrUnionAll($query->selectOrUnionAll()),
+                        'alias' => LampagerPaginator::class,
+                        'conditions' => [
+                            LampagerPaginator::class . ".{$model->primaryKey} = {$model->alias}.{$model->primaryKey}",
+                        ],
+                    ],
+                ],
+                $this->paginator->query['joins'] ?: []
+            ),
+            'config' => $query,
+            'callbacks' => $this->paginator->query['callbacks'],
+            'fields' => $this->paginator->query['fields'],
+            'conditions' => null,
+            'group' => null,
+            'limit' => null,
+            'offset' => null,
+            'order' => null,
+            'page' => null,
+        ];
     }
 
-    public function build(array $cursor = [])
+    /**
+     * Build query from the cursor.
+     *
+     * @param  Cursor|int[]|string[] $cursor Cursor.
+     * @return array                         Options for Model::find.
+     */
+    public function build($cursor = [])
     {
-        return $this->transform($this->paginator->configure($cursor));
+        return $this->transform($this->paginator->configure(new LampagerArrayCursor($this->paginator->builder, $cursor)));
     }
 
     /**
