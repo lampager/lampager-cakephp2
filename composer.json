@@ -1,0 +1,28 @@
+{
+    "name": "lampager/lampager-cakephp",
+    "description": "Rapid pagination for CakePHP",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "mpyw",
+            "email": "ryosuke_i_628@yahoo.co.jp"
+        },
+        {
+            "name": "Chitoku",
+            "email": "odango@chitoku.jp"
+        }
+    ],
+    "keywords": ["cakephp", "pagination", "paginator", "offset", "limit"],
+    "require": {
+        "php": "^5.3 || ^7.0",
+        "composer/installers": "*",
+        "lampager/lampager": "^0.1.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^3.5",
+        "cakephp/cakephp": "^2.10.4",
+        "php-coveralls/php-coveralls": "^1.0",
+        "nilportugues/sql-query-formatter": "^1.2"
+    }
+}
