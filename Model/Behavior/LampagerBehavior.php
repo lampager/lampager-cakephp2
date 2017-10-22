@@ -52,7 +52,7 @@ class LampagerBehavior extends ModelBehavior
     {
         $cursor = isset($query['cursor']) ? $query['cursor'] : [];
         $lampager = LampagerPaginator::fromQuery($model, $query);
-        $config = $lampager->configure(new LampagerArrayCursor($cursor, $model));
+        $config = $lampager->configure(new LampagerArrayCursor($model, $cursor));
 
         return [
             'joins' => array_merge(

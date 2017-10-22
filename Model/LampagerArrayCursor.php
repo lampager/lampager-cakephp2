@@ -6,16 +6,16 @@ use Lampager\Cursor;
 
 class LampagerArrayCursor implements Cursor
 {
-    /** @var array */
-    protected $cursor;
-
     /** @var Model */
     protected $model;
 
-    public function __construct(array $cursor = [], Model $model)
+    /** @var array */
+    protected $cursor;
+
+    public function __construct(Model $model, array $cursor = [])
     {
-        $this->cursor = $cursor;
         $this->model = $model;
+        $this->cursor = $cursor;
     }
 
     /**
