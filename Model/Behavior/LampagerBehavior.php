@@ -2,7 +2,6 @@
 
 App::uses('ModelBehavior', 'Model');
 App::uses('LampagerPaginator', 'Lampager.Model');
-App::uses('LampagerArrayCursor', 'Lampager.Model');
 App::uses('LampagerArrayProcessor', 'Lampager.Model');
 
 class LampagerBehavior extends ModelBehavior

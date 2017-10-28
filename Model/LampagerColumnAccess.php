@@ -12,6 +12,13 @@ class LampagerColumnAccess
         $this->model = $model;
     }
 
+    /**
+     * Return a value indicating whether the data has any value whose field mathes the column.
+     *
+     * @param  array  $data
+     * @param  string $column
+     * @return bool
+     */
     public function has(array $data, $column)
     {
         if (strpos($column, '.')) {
@@ -21,6 +28,13 @@ class LampagerColumnAccess
         return isset($data[$this->model->alias][$column]) || isset($data[$column]);
     }
 
+    /**
+     * Get a value from the data by the column.
+     *
+     * @param  array  $data
+     * @param  string $column
+     * @return mixed
+     */
     public function get(array $data, $column)
     {
         if (!$this->has($data, $column)) {
@@ -39,6 +53,13 @@ class LampagerColumnAccess
         return $data[$column];
     }
 
+    /**
+     * Create an associative array which has model as 1st dimensional key and column as 2nd dimensional key.
+     *
+     * @param  string $column
+     * @param  mixed  $value
+     * @return array[]
+     */
     public function with($column, $value)
     {
         if (strpos($column, '.')) {
