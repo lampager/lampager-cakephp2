@@ -30,6 +30,19 @@ class LampagerTransformer
     {
         $model = $this->paginator->builder;
         return [
+            // Compiled by static::compileSelect
+            'conditions' => null,
+
+            // Compiled by static::compileLimit
+            'limit' => null,
+
+            // Compiled by static::compileOrderBy
+            'order' => null,
+
+            // Used along with ArrayProcessor
+            'config' => $query,
+
+            // Create subquery and inner join with it
             'joins' => array_merge(
                 [
                     [
@@ -43,16 +56,7 @@ class LampagerTransformer
                 ],
                 $this->paginator->query['joins'] ?: []
             ),
-            'config' => $query,
-            'callbacks' => $this->paginator->query['callbacks'],
-            'fields' => $this->paginator->query['fields'],
-            'conditions' => null,
-            'group' => null,
-            'limit' => null,
-            'offset' => null,
-            'order' => null,
-            'page' => null,
-        ];
+        ] + $this->paginator->query;
     }
 
     /**
@@ -110,9 +114,6 @@ class LampagerTransformer
             'fields' => [
                 "{$model->alias}.{$model->primaryKey}",
             ],
-            'offset' => null,
-            'group' => null,
-            'joins' => [],
         ], $model);
     }
 
