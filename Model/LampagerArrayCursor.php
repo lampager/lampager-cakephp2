@@ -1,33 +1,38 @@
 <?php
 
 App::uses('Model', 'Model');
+App::uses('LampagerColumnAccess', 'Lampager.Model');
 
 use Lampager\Contracts\Cursor;
 
 class LampagerArrayCursor implements Cursor
 {
-    /** @var Model */
-    protected $model;
-
     /** @var array */
     protected $cursor;
 
+    /** @var LampagerColumnAccess */
+    protected $access;
+
     public function __construct(Model $model, array $cursor = [])
     {
-        $this->model = $model;
         $this->cursor = $cursor;
+        $this->access = new LampagerColumnAccess($model);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function has($column)
+    public function has(...$columns)
     {
-        if (strpos($column, '.')) {
-            list($model, $column) = explode('.', $column);
-            return isset($this->cursor[$model][$column]) || isset($this->cursor["{$model}.{$column}"]);
+        if (empty($this->cursor)) {
+            return null;
         }
-        return isset($this->cursor[$this->model->alias][$column]) || isset($this->cursor[$column]);
+        foreach ($columns as $column) {
+            if (!$this->access->has($this->cursor, $column)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -35,19 +40,6 @@ class LampagerArrayCursor implements Cursor
      */
     public function get($column)
     {
-        if (!$this->has($column)) {
-            return null;
-        }
-        if (strpos($column, '.')) {
-            list($model, $column) = explode('.', $column);
-            if (isset($this->cursor[$model][$column])) {
-                return $this->cursor[$model][$column];
-            }
-            return $this->cursor["{$model}.{$column}"];
-        }
-        if (isset($this->cursor[$this->model->alias][$column])) {
-            return $this->cursor[$this->model->alias][$column];
-        }
-        return $this->cursor[$column];
+        return $this->access->get($this->cursor, $column);
     }
 }
