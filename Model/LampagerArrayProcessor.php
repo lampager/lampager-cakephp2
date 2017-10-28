@@ -27,28 +27,20 @@ class LampagerArrayProcessor extends ArrayProcessor
     }
 
     /**
-     * Make a cursor from the specific row.
-     *
-     * @param  Query          $query
-     * @param  mixed          $row
-     * @return int[]|string[]
+     * {@inheritdoc}
      */
-    protected function makeCursor(Query $query, $row)
+    protected function field($row, $column)
     {
-        $fields = [];
-        foreach ($query->orders() as $order) {
-            if (strpos($order->column(), '.') !== false) {
-                list($model, $column) = explode('.', $order->column());
-                $fields[$model][$column] = $this->field($row[$model], $column);
-                continue;
+        if (strpos($column, '.')) {
+            list($model, $column) = explode('.', $column);
+            if (isset($row[$model][$column])) {
+                return $row[$model][$column];
             }
-            if (isset($row[$this->model->alias][$order->column()])) {
-                list($model, $column) = [$this->model->alias, $order->column()];
-                $fields[$model][$column] = $this->field($row[$model], $column);
-                continue;
-            }
-            $fields[$order->column()] = $this->field($row, $order->column());
+            return $row["{$model}.{$column}"];
         }
-        return $fields;
+        if (isset($row[$this->model->alias][$column])) {
+            return $row[$this->model->alias][$column];
+        }
+        return $row["{$this->model->alias}.{$column}"];
     }
 }
