@@ -1,9 +1,10 @@
 <?php
 
+App::uses('LampagerArrayCursor', 'Lampager.Model');
 App::uses('LampagerPaginator', 'Lampager.Model');
 
 use Lampager\Cursor;
-use Lampager\Query\Query;
+use Lampager\Query;
 use Lampager\Query\Select;
 use Lampager\Query\SelectOrUnionAll;
 use Lampager\Query\UnionAll;

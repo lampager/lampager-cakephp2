@@ -3,7 +3,7 @@
 App::uses('Model', 'Model');
 
 use Lampager\ArrayProcessor;
-use Lampager\Query\Query;
+use Lampager\Query;
 
 class LampagerArrayProcessor extends ArrayProcessor
 {

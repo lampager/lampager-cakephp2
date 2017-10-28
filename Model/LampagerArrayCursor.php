@@ -2,7 +2,7 @@
 
 App::uses('Model', 'Model');
 
-use Lampager\Cursor;
+use Lampager\Contracts\Cursor;
 
 class LampagerArrayCursor implements Cursor
 {
