@@ -84,7 +84,7 @@ class LampagerTransformer
         if ($selectOrUnionAll instanceof UnionAll) {
             $supportQuery = $this->compileSelect($selectOrUnionAll->supportQuery());
             $mainQuery = $this->compileSelect($selectOrUnionAll->mainQuery());
-            return '(SELECT * FROM (' . $supportQuery . ') UNION ALL SELECT * FROM (' . $mainQuery . '))';
+            return '(SELECT * FROM (' . $supportQuery . ') q UNION ALL SELECT * FROM (' . $mainQuery . ') q)';
         }
 
         // @codeCoverageIgnoreStart
