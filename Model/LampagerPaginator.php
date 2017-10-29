@@ -64,9 +64,6 @@ class LampagerPaginator extends BasePaginator
             if (is_int($column)) {
                 list($column, $order) = explode(' ', $order) + [1 => 'ASC'];
             }
-            if (preg_match('/(?<column>.*)\x20(?<order>ASC|DESC).*/i', $column, $matches)) {
-                list($column, $order) = $matches;
-            }
             if (strpos($column, '.') === false) {
                 $column = "{$this->builder->alias}.{$column}";
             }
