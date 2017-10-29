@@ -42,8 +42,23 @@ class LampagerArrayProcessor extends ArrayProcessor
      */
     protected function makeCursor(Query $query, $row)
     {
-        return array_replace_recursive(...array_map(function (Order $order) use ($row) {
-            return $this->access->with($order->column(), $this->field($row, $order->column()));
-        }, $query->orders()));
+        return array_replace_recursive(
+            ...array_map(
+                function ($column) use ($row) {
+                    return $this->access->with($column, $this->field($row, $column));
+                },
+                array_intersect(
+                    array_keys(
+                        iterator_to_array($this->access->iterate($row))
+                    ),
+                    array_map(
+                        static function (Order $order) {
+                            return $order->column();
+                        },
+                        $query->orders()
+                    )
+                )
+            )
+        );
     }
 }
