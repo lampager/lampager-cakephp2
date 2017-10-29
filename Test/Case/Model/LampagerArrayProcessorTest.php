@@ -25,7 +25,7 @@ class LampagerArrayProcessorTest extends LampagerTestCase
 
     public function tearDown()
     {
-        $this->Post->Behaviors->detach('Lampager');
+        $this->Post->Behaviors->unload('Lampager');
         parent::tearDown();
     }
 

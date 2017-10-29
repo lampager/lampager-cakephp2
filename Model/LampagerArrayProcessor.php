@@ -14,6 +14,9 @@ class LampagerArrayProcessor extends ArrayProcessor
     /** @var Model */
     protected $model;
 
+    /** @var LampagerColumnAccess */
+    protected $access;
+
     /**
      * @return static
      */

@@ -73,7 +73,7 @@ class LampagerTransformer
     }
 
     /**
-     * @param  SelectOrUnionAll $select
+     * @param  SelectOrUnionAll $selectOrUnionAll
      * @return string
      */
     protected function compileSelectOrUnionAll(SelectOrUnionAll $selectOrUnionAll)
@@ -134,7 +134,7 @@ class LampagerTransformer
 
     /**
      * @param  ConditionGroup     $group
-     * @return \Generator<string, string>
+     * @return \Generator<string,string>
      */
     protected function compileWhereGroup(ConditionGroup $group)
     {
