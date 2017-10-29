@@ -14,5 +14,51 @@ Rapid pagination without using OFFSET
 ## Requirements
 
 - PHP: ^5.6 || ^7.0
-- Laravel: ^2.10
+- CakePHP: ^2.10
 - [lampager/lampager](https://github.com/lampager/lampager): ^0.2
+
+## Basic Usage
+
+Load as a plugin. See [How To Install Plugins - 2.x](https://book.cakephp.org/2.0/en/plugins/how-to-install-plugins.html) for detail.
+
+Plugin needs to be loaded manually in `app/Config/bootstrap.php`:
+
+```php
+CakePlugin::load('Lampager');
+```
+
+Next, add `'Lampager.Lampager'` to your Model class (`AppModel` is preferable):
+
+```php
+class AppModel extends Model
+{
+    public $actsAs = [
+        'Lampager.Lampager',
+    ];
+}
+```
+
+Now you are done. Use `Model::find` with `lampager`.
+
+```php
+class Post extends AppModel
+{
+    public function latest(array $cursor = [])
+    {
+        return $this->find('lampager', [
+            // Lampager options
+            'forward' => true,
+            'seekable' => true,
+            'cursor' => $cursor,
+
+            // Model::find query
+            'limit' => 10,
+            'order' => [
+                'Post.modified' => 'DESC',
+                'Post.created' => 'DESC',
+                'Post.id' => 'DESC',
+            ],
+        ]);
+    }
+}
+```
