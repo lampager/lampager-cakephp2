@@ -25,7 +25,7 @@ class LampagerColumnAccess
             list($model, $column) = explode('.', $column);
             return isset($data[$model][$column]) || isset($data["{$model}.{$column}"]);
         }
-        return isset($data[$this->model->alias][$column]) || isset($data[$column]);
+        return isset($data[$this->model->alias][$column]) || isset($data["{$this->model->alias}.{$column}"]) || isset($data[$column]);
     }
 
     /**
@@ -49,6 +49,9 @@ class LampagerColumnAccess
         }
         if (isset($data[$this->model->alias][$column])) {
             return $data[$this->model->alias][$column];
+        }
+        if (isset($data["{$this->model->alias}.{$column}"])) {
+            return $data["{$this->model->alias}.{$column}"];
         }
         return $data[$column];
     }
