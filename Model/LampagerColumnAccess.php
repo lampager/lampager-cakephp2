@@ -59,9 +59,9 @@ class LampagerColumnAccess
     /**
      * Create an associative array which has model as 1st dimensional key and column as 2nd dimensional key.
      *
-     * @param  string $column
-     * @param  mixed  $value
-     * @return array[]
+     * @param  string    $column
+     * @param  mixed     $value
+     * @return mixed[][]
      */
     public function with($column, $value)
     {
@@ -78,5 +78,24 @@ class LampagerColumnAccess
                 $column => $value,
             ],
         ];
+    }
+
+    /**
+     * Iterate through the data with flatten field name
+     *
+     * @param  array $data
+     * @return \Generator
+     */
+    public function iterate(array $data)
+    {
+        foreach ($data as $model => $value) {
+            if (strpos($model, '.')) {
+                yield $model => $value;
+                continue;
+            }
+            foreach ($value as $column => $v) {
+                yield "{$model}.{$column}" => $v;
+            }
+        }
     }
 }
