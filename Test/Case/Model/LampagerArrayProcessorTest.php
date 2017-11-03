@@ -20,7 +20,7 @@ class LampagerArrayProcessorTest extends LampagerTestCase
     {
         parent::setUp();
         $this->Post = ClassRegistry::init('Post');
-        $this->Post->Behaviors->attach('Lampager');
+        $this->Post->Behaviors->load('Lampager');
     }
 
     public function tearDown()

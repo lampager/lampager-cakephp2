@@ -29,7 +29,7 @@ class LampagerPaginatorTest extends LampagerTestCase
     public function testFromQuery(array $query, array $expected)
     {
         $expected = (object)$expected;
-        $paginator = LampagerPaginator::fromQuery($this->Post, $query);
+        $paginator = LampagerPaginator::create($this->Post, $query);
         $this->assertSame($expected->orders, $paginator->orders);
         $this->assertSame($expected->limit, $paginator->limit);
         $this->assertSame($expected->backward, $paginator->backward);

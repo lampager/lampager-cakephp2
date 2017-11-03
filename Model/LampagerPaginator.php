@@ -6,6 +6,7 @@ App::uses('LampagerTransformer', 'Lampager.Model');
 // @codeCoverageIgnoreEnd
 
 use Lampager\Paginator as BasePaginator;
+use Lampager\Query\Order;
 
 class LampagerPaginator extends BasePaginator
 {
@@ -18,59 +19,61 @@ class LampagerPaginator extends BasePaginator
     /** @var LampagerTransformer */
     public $transformer;
 
-    /** @var string[] */
-    protected static $mapToOptions = [
-        'order',
-        'limit',
-        'forward',
-        'backward',
-        'exclusive',
-        'inclusive',
-        'seekable',
-        'unseekable',
-    ];
-
     public function __construct(Model $builder, array $query)
     {
         $this->builder = $builder;
-        $this->query = $query;
+        $this->fromArray($query);
         $this->transformer = new LampagerTransformer($this);
     }
 
     /**
      * @param  Model             $builder Model.
      * @param  array             $query   Query.
-     * @return LampagerPaginator
+     * @return static
      */
-    public static function fromQuery(Model $builder, array $query)
+    public static function create(Model $builder, array $query)
     {
-        $paginator = new static($builder, $query);
-
-        foreach (static::$mapToOptions as $key) {
-            if (isset($query[$key])) {
-                $paginator->$key($query[$key]);
-            }
-        }
-
-        return $paginator;
+        return new static($builder, $query);
     }
 
     /**
-     * Map order options to Paginator.
-     * @param  string[] $orders Orders.
+     * Add cursor parameter name for ORDER BY statement.
+     *
+     * @param  string|int $column
+     * @param  string     $order
      * @return $this
      */
-    protected function order(array $orders)
+    public function orderBy($column, $order = Order::ASC)
     {
-        foreach ($orders as $column => $order) {
-            if (is_int($column)) {
-                list($column, $order) = explode(' ', $order) + [1 => 'ASC'];
-            }
-            if (strpos($column, '.') === false) {
-                $column = "{$this->builder->alias}.{$column}";
-            }
-            $this->orderBy($column, strtolower($order));
+        if (is_int($column)) {
+            list($column, $order) = explode(' ', $order) + [1 => 'ASC'];
         }
-        return $this;
+        if (strpos($column, '.') === false) {
+            $column = "{$this->builder->alias}.{$column}";
+        }
+        return parent::orderBy($column, strtolower($order));
+    }
+
+    /**
+     * Define options from an associative array.
+     *
+     * @param  (bool|int|string[])[] $options
+     * @return $this
+     */
+    public function fromArray(array $options)
+    {
+        // Not supported in CakePHP 2 version
+        unset($options['orders']);
+
+        // Merge with existing query
+        $this->query = array_replace_recursive($this->query ?: [], $options);
+
+        if (isset($options['order'])) {
+            foreach ($options['order'] as $column => $order) {
+                $this->orderBy($column, $order);
+            }
+        }
+
+        return parent::fromArray($options);
     }
 }
