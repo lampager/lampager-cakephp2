@@ -38,7 +38,78 @@ class AppModel extends Model
 }
 ```
 
-Now you are done. Use `Model::find` with `lampager`.
+### Use in Controller
+
+At first, your `Model` class must have `'Lampager.Lampager'` enabled.
+
+Accept cursor parameters from a request and pass it through `PaginatorComponent::settings`.
+
+```php
+class PostsController extends AppController
+{
+    // Load default PaginatorComponent of CakePHP
+    public $components = [
+        'Paginator',
+    ];
+
+    public function index()
+    {
+        // Get cursor parameters
+        $previous = $this->request->param('named.previous_cursor');
+        $next = $this->request->param('named.next_cursor');
+
+        $this->Paginator->settings = [
+            // Lampager options
+            // If the previous_cursor is not set, paginate forward; otherwise backward
+            'forward' => !$previous,
+            'cursor' => $previous ?: $next ?: [],
+            'seekable' => true,
+
+            // PaginatorComponent::settings query
+            'conditions' => [
+                'Post.type' => 'public',
+            ],
+            'order' => [
+                'Post.created' => 'DESC',
+                'Post.id' => 'DESC',
+            ],
+            'limit' => 15,
+        ];
+
+        /** @var mixed[][] */
+        $posts = $this->Paginator->paginate(Post::class);
+        $this->set('posts', $posts);
+    }
+}
+```
+
+And the pagination links can be output as follows:
+
+```php
+// If the previous_cursor exists, there is a previous page
+if (isset($posts['meta']['previous_cursor'])) {
+    echo $this->Html->link('<< Previous', [
+        'controller' => 'posts',
+        'action' => 'index',
+        'previous_cursor' => $posts['meta']['previous_cursor'],
+    ]);
+}
+
+// If the next_cursor exists, there is a next page
+if (isset($posts['meta']['next_cursor'])) {
+    echo $this->Html->link('Next >>', [
+        'controller' => 'posts',
+        'action' => 'index',
+        'next_cursor' => $posts['meta']['next_cursor'],
+    ]);
+}
+```
+
+### Use in Model
+
+At first, your `Model` class must have `'Lampager.Lampager'` enabled.
+
+Simply use `Model::find` with `lampager`.
 
 ```php
 class Post extends AppModel
