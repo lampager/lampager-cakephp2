@@ -15,7 +15,7 @@ Rapid pagination without using OFFSET
 
 - PHP: ^5.6 || ^7.0
 - CakePHP: ^2.10
-- [lampager/lampager](https://github.com/lampager/lampager): ^0.2
+- [lampager/lampager](https://github.com/lampager/lampager): ^0.3
 
 ## Basic Usage
 
@@ -87,20 +87,20 @@ And the pagination links can be output as follows:
 
 ```php
 // If the previous_cursor exists, there is a previous page
-if (isset($posts['meta']['previous_cursor'])) {
+if ($posts->hasPrevious) {
     echo $this->Html->link('<< Previous', [
         'controller' => 'posts',
         'action' => 'index',
-        'previous_cursor' => $posts['meta']['previous_cursor'],
+        'previous_cursor' => $posts->previousCursor,
     ]);
 }
 
 // If the next_cursor exists, there is a next page
-if (isset($posts['meta']['next_cursor'])) {
+if ($posts->hasNext) {
     echo $this->Html->link('Next >>', [
         'controller' => 'posts',
         'action' => 'index',
-        'next_cursor' => $posts['meta']['next_cursor'],
+        'next_cursor' => $posts->nextCursor,
     ]);
 }
 ```

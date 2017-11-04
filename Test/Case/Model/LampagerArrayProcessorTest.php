@@ -8,6 +8,7 @@ App::uses('LampagerTestCase', 'Test/Case');
 App::uses('LampagerArrayCursor', 'Model');
 App::uses('LampagerArrayProcessor', 'Model');
 
+use Lampager\PaginationResult;
 use Lampager\Query\Order;
 
 class LampagerArrayProcessorTest extends LampagerTestCase
@@ -69,7 +70,9 @@ class LampagerArrayProcessorTest extends LampagerTestCase
      */
     public function testProcessByFinder(array $query, $expected)
     {
-        $this->assertSame($expected, $this->Post->find('lampager', $query));
+        $actual = $this->Post->find('lampager', $query);
+        $this->assertInstanceOf(PaginationResult::class, $actual);
+        $this->assertSame($expected, (array)$actual);
     }
 
     /**
@@ -82,7 +85,9 @@ class LampagerArrayProcessorTest extends LampagerTestCase
     public function testProcessByComponent(array $query, $expected)
     {
         $this->Paginator->settings = $query;
-        $this->assertSame($expected, $this->Paginator->paginate('Post'));
+        $actual = $this->Paginator->paginate('Post');
+        $this->assertInstanceOf(PaginationResult::class, $actual);
+        $this->assertSame($expected, (array)$actual);
     }
 
     public function processProvider()
@@ -118,12 +123,13 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'next_cursor' => [
-                        'Post' => [
-                            'id' => '2',
-                            'modified' => '2017-01-01 11:00:00',
-                        ],
+                'hasPrevious' => null,
+                'previousCursor' => null,
+                'hasNext' => true,
+                'nextCursor' => [
+                    'Post' => [
+                        'id' => '2',
+                        'modified' => '2017-01-01 11:00:00',
                     ],
                 ],
             ],
@@ -161,12 +167,13 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'next_cursor' => [
-                        'Post' => [
-                            'id' => '5',
-                            'modified' => '2017-01-01 10:00:00',
-                        ],
+                'hasPrevious' => null,
+                'previousCursor' => null,
+                'hasNext' => true,
+                'nextCursor' => [
+                    'Post' => [
+                        'id' => '5',
+                        'modified' => '2017-01-01 10:00:00',
                     ],
                 ],
             ],
@@ -209,18 +216,18 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'previous_cursor' => [
-                        'Post' => [
-                            'id' => '1',
-                            'modified' => '2017-01-01 10:00:00',
-                        ],
+                'hasPrevious' => true,
+                'previousCursor' => [
+                    'Post' => [
+                        'id' => '1',
+                        'modified' => '2017-01-01 10:00:00',
                     ],
-                    'next_cursor' => [
-                        'Post' => [
-                            'id' => '4',
-                            'modified' => '2017-01-01 11:00:00',
-                        ],
+                ],
+                'hasNext' => true,
+                'nextCursor' => [
+                    'Post' => [
+                        'id' => '4',
+                        'modified' => '2017-01-01 11:00:00',
                     ],
                 ],
             ],
@@ -264,15 +271,15 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'previous_cursor' => [
-                        'Post' => [
-                            'id' => '5',
-                            'modified' => '2017-01-01 10:00:00',
-                        ],
+                'hasPrevious' => true,
+                'previousCursor' => [
+                    'Post' => [
+                        'id' => '5',
+                        'modified' => '2017-01-01 10:00:00',
                     ],
-                    'next_cursor' => null,
                 ],
+                'hasNext' => false,
+                'nextCursor' => null,
             ],
         ];
 
@@ -307,14 +314,15 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'previous_cursor' => [
-                        'Post' => [
-                            'id' => '3',
-                            'modified' => '2017-01-01 10:00:00',
-                        ],
+                'hasPrevious' => true,
+                'previousCursor' => [
+                    'Post' => [
+                        'id' => '3',
+                        'modified' => '2017-01-01 10:00:00',
                     ],
                 ],
+                'hasNext' => null,
+                'nextCursor' => null,
             ],
         ];
 
@@ -350,14 +358,15 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'previous_cursor' => [
-                        'Post' => [
-                            'id' => '5',
-                            'modified' => '2017-01-01 10:00:00',
-                        ],
+                'hasPrevious' => true,
+                'previousCursor' => [
+                    'Post' => [
+                        'id' => '5',
+                        'modified' => '2017-01-01 10:00:00',
                     ],
                 ],
+                'hasNext' => null,
+                'nextCursor' => null,
             ],
         ];
 
@@ -392,13 +401,13 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'previous_cursor' => null,
-                    'next_cursor' => [
-                        'Post' => [
-                            'id' => '5',
-                            'modified' => '2017-01-01 10:00:00',
-                        ],
+                'hasPrevious' => false,
+                'previousCursor' => null,
+                'hasNext' => true,
+                'nextCursor' => [
+                    'Post' => [
+                        'id' => '5',
+                        'modified' => '2017-01-01 10:00:00',
                     ],
                 ],
             ],
@@ -430,13 +439,13 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'previous_cursor' => null,
-                    'next_cursor' => [
-                        'Post' => [
-                            'id' => '1',
-                            'modified' => '2017-01-01 10:00:00',
-                        ],
+                'hasPrevious' => false,
+                'previousCursor' => null,
+                'hasNext' => true,
+                'nextCursor' => [
+                    'Post' => [
+                        'id' => '1',
+                        'modified' => '2017-01-01 10:00:00',
                     ],
                 ],
             ],
@@ -473,12 +482,13 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'next_cursor' => [
-                        'Post' => [
-                            'id' => '3',
-                            'modified' => '2017-01-01 10:00:00',
-                        ],
+                'hasPrevious' => null,
+                'previousCursor' => null,
+                'hasNext' => true,
+                'nextCursor' => [
+                    'Post' => [
+                        'id' => '3',
+                        'modified' => '2017-01-01 10:00:00',
                     ],
                 ],
             ],
@@ -516,12 +526,13 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'next_cursor' => [
-                        'Post' => [
-                            'id' => '5',
-                            'modified' => '2017-01-01 10:00:00',
-                        ],
+                'hasPrevious' => null,
+                'previousCursor' => null,
+                'hasNext' => true,
+                'nextCursor' => [
+                    'Post' => [
+                        'id' => '5',
+                        'modified' => '2017-01-01 10:00:00',
                     ],
                 ],
             ],
@@ -558,15 +569,15 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'previous_cursor' => [
-                        'Post' => [
-                            'id' => '5',
-                            'modified' => '2017-01-01 10:00:00',
-                        ],
+                'hasPrevious' => true,
+                'previousCursor' => [
+                    'Post' => [
+                        'id' => '5',
+                        'modified' => '2017-01-01 10:00:00',
                     ],
-                    'next_cursor' => null,
                 ],
+                'hasNext' => false,
+                'nextCursor' => null,
             ],
         ];
 
@@ -596,15 +607,15 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'previous_cursor' => [
-                        'Post' => [
-                            'id' => '1',
-                            'modified' => '2017-01-01 10:00:00',
-                        ],
+                'hasPrevious' => true,
+                'previousCursor' => [
+                    'Post' => [
+                        'id' => '1',
+                        'modified' => '2017-01-01 10:00:00',
                     ],
-                    'next_cursor' => null,
                 ],
+                'hasNext' => false,
+                'nextCursor' => null,
             ],
         ];
 
@@ -639,14 +650,15 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'previous_cursor' => [
-                        'Post' => [
-                            'id' => '2',
-                            'modified' => '2017-01-01 11:00:00',
-                        ],
+                'hasPrevious' => true,
+                'previousCursor' => [
+                    'Post' => [
+                        'id' => '2',
+                        'modified' => '2017-01-01 11:00:00',
                     ],
                 ],
+                'hasNext' => null,
+                'nextCursor' => null,
             ],
         ];
 
@@ -682,14 +694,15 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'previous_cursor' => [
-                        'Post' => [
-                            'id' => '5',
-                            'modified' => '2017-01-01 10:00:00',
-                        ],
+                'hasPrevious' => true,
+                'previousCursor' => [
+                    'Post' => [
+                        'id' => '5',
+                        'modified' => '2017-01-01 10:00:00',
                     ],
                 ],
+                'hasNext' => null,
+                'nextCursor' => null,
             ],
         ];
 
@@ -730,18 +743,18 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'previous_cursor' => [
-                        'Post' => [
-                            'id' => '4',
-                            'modified' => '2017-01-01 11:00:00',
-                        ],
+                'hasPrevious' => true,
+                'previousCursor' => [
+                    'Post' => [
+                        'id' => '4',
+                        'modified' => '2017-01-01 11:00:00',
                     ],
-                    'next_cursor' => [
-                        'Post' => [
-                            'id' => '1',
-                            'modified' => '2017-01-01 10:00:00',
-                        ],
+                ],
+                'hasNext' => true,
+                'nextCursor' => [
+                    'Post' => [
+                        'id' => '1',
+                        'modified' => '2017-01-01 10:00:00',
                     ],
                 ],
             ],
@@ -785,13 +798,13 @@ class LampagerArrayProcessorTest extends LampagerTestCase
                         ],
                     ],
                 ],
-                'meta' => [
-                    'previous_cursor' => null,
-                    'next_cursor' => [
-                        'Post' => [
-                            'id' => '5',
-                            'modified' => '2017-01-01 10:00:00',
-                        ],
+                'hasPrevious' => false,
+                'previousCursor' => null,
+                'hasNext' => true,
+                'nextCursor' => [
+                    'Post' => [
+                        'id' => '5',
+                        'modified' => '2017-01-01 10:00:00',
                     ],
                 ],
             ],
