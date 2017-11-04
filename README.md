@@ -17,6 +17,12 @@ Rapid pagination without using OFFSET
 - CakePHP: ^2.10
 - [lampager/lampager](https://github.com/lampager/lampager): ^0.3
 
+## Installing
+
+```bash
+composer require lampager/lampager-cakephp2:^0.1.0
+```
+
 ## Basic Usage
 
 Load as a plugin. See [How To Install Plugins - 2.x](https://book.cakephp.org/2.0/en/plugins/how-to-install-plugins.html) for detail.
