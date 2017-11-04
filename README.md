@@ -86,7 +86,7 @@ class PostsController extends AppController
 And the pagination links can be output as follows:
 
 ```php
-// If the previous_cursor exists, there is a previous page
+// If there is a previous page, print pagination link
 if ($posts->hasPrevious) {
     echo $this->Html->link('<< Previous', [
         'controller' => 'posts',
@@ -95,7 +95,7 @@ if ($posts->hasPrevious) {
     ]);
 }
 
-// If the next_cursor exists, there is a next page
+// If there is a next page, print pagination link
 if ($posts->hasNext) {
     echo $this->Html->link('Next >>', [
         'controller' => 'posts',
@@ -114,6 +114,9 @@ Simply use `Model::find` with `lampager`.
 ```php
 class Post extends AppModel
 {
+    /**
+     * @return Lampager\PaginationResult
+     */
     public function latest(array $cursor = [])
     {
         return $this->find('lampager', [
