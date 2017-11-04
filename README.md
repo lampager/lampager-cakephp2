@@ -133,3 +133,23 @@ class Post extends AppModel
     }
 }
 ```
+
+## Classes
+
+See also: [lampager/lampager](https://github.com/lampager/lampager).
+
+| Name                     | Type  | Parent Class/Interface       | Description                                                                         |
+|:-------------------------|:------|:-----------------------------|:------------------------------------------------------------------------------------|
+| `LampagerBehavior`       | Class | ModelBehavior                | CakePHP behavior which handles `Model::find()` and `PaginatorComponent::paginate()` |
+| `LampagerArrayCursor`    | Class | Lampager\\Contracts\\`Query` | CakePHP style multi-dimensional array cursor                                        |
+| `LampagerColumnAccess`   | Class |                              | CakePHP style multi-dimensional array accessor                                      |
+| `LampagerTransformer`    | Class |                              | CakePHP query genenrator                                                            |
+| `LampagerArrayProcessor` | Class | Lampager\\`ArrayProcessor`   | Processor implementation for CakePHP                                                |
+| `LampagerPaginator`      | Class | Lampager\\`Paginator`        | Paginator implementation for CakePHP                                                |
+
+## API
+
+See also: [lampager/lampager](https://github.com/lampager/lampager).
+
+Using `Model::find()` or `PaginatorComponent::paginate()` is recommended. The
+query is merged with CakePHP query and passed to `Lampager\Query`.
