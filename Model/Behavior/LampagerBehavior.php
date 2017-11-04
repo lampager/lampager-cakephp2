@@ -30,6 +30,8 @@ class LampagerBehavior extends ModelBehavior
     }
 
     /**
+     * Hanldle the custom finder. Only called by Model::find().
+     *
      * @param  Model  $model   Model.
      * @param  string $method  Method.
      * @param  string $state   Either "before" or "after"
@@ -50,5 +52,49 @@ class LampagerBehavior extends ModelBehavior
     protected function findLampagerAfter(Model $model, array $query = [], array $results = [])
     {
         return LampagerArrayProcessor::create($model)->process($query['config'], $results);
+    }
+
+    /**
+     * Paginate the Model. Only called by PaginatorComponent::paginate().
+     *
+     * @param Model $model
+     * @param array $conditions
+     * @param array $fields
+     * @param array $order
+     * @param int   $limit
+     * @param int   $page
+     * @param int   $recursive
+     * @param array $extra
+     */
+    public function paginate(Model $model, $conditions, $fields, $order, $limit, $page = 1, $recursive = null, array $extra = [])
+    {
+        /**
+         * Extract extra parameters which may include
+         *
+         * @var bool  $forward
+         * @var bool  $backward
+         * @var bool  $exclusive
+         * @var bool  $inclusive
+         * @var bool  $seekable
+         * @var bool  $unseekable
+         * @var array $cursor
+         */
+        extract($extra, EXTR_SKIP);
+
+        return $model->find('lampager', compact(
+            'conditions',
+            'fields',
+            'order',
+            'limit',
+            'page',
+            'recursive',
+            'forward',
+            'backward',
+            'exclusive',
+            'inclusive',
+            'seekable',
+            'unseekable',
+            'cursor'
+        ));
     }
 }

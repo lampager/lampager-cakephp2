@@ -1,5 +1,9 @@
 <?php
 
+App::uses('CakeRequest', 'Network');
+App::uses('ComponentCollection', 'Controller');
+App::uses('Controller', 'Controller');
+App::uses('PaginatorComponent', 'Controller/Component');
 App::uses('LampagerTestCase', 'Test/Case');
 App::uses('LampagerArrayCursor', 'Model');
 App::uses('LampagerArrayProcessor', 'Model');
@@ -11,6 +15,15 @@ class LampagerArrayProcessorTest extends LampagerTestCase
     /** @var Model */
     protected $Post;
 
+    /** @var CakeRequest */
+    protected $request;
+
+    /** @var Controller */
+    protected $Controller;
+
+    /** @var PaginatorComponent */
+    protected $Paginator;
+
     /** @var string[] */
     public $fixtures = [
         'app.Post',
@@ -19,26 +32,57 @@ class LampagerArrayProcessorTest extends LampagerTestCase
     public function setUp()
     {
         parent::setUp();
+
+        // Prepare for ModelBehavior
         $this->Post = ClassRegistry::init('Post');
         $this->Post->Behaviors->load('Lampager');
+
+        // Prepare for PaginatorComponent
+        $this->request = new CakeRequest('posts/index');
+        $this->request->params['pass'] = [];
+        $this->request->params['named'] = [];
+
+        $this->Controller = new Controller($this->request);
+        $this->Controller->Post = $this->Post;
+
+        $this->Paginator = new PaginatorComponent($this->getMock(ComponentCollection::class), []);
+        $this->Paginator->Controller = $this->Controller;
     }
 
     public function tearDown()
     {
+        // Shutdown for ModelBehavior
         $this->Post->Behaviors->unload('Lampager');
+
+        // Shutdown for PaginatorComponent
+        $this->Controller->Components->unload('Paginator');
+
         parent::tearDown();
     }
 
     /**
-     * Test LampagerArrayProcessor::process
+     * Test LampagerArrayProcessor::process by custom finder
      *
      * @param array $query
      * @param mixed $expected
      * @dataProvider processProvider
      */
-    public function testProcess(array $query, $expected)
+    public function testProcessByFinder(array $query, $expected)
     {
         $this->assertSame($expected, $this->Post->find('lampager', $query));
+    }
+
+    /**
+     * Test LampagerArrayProcessor::process by PaginatorComponent
+     *
+     * @param array $query
+     * @param mixed $expected
+     * @dataProvider processProvider
+     */
+    public function testProcessByComponent(array $query, $expected)
+    {
+        $this->Paginator->settings = $query;
+        $this->assertSame($expected, $this->Paginator->paginate('Post'));
     }
 
     public function processProvider()
