@@ -1,10 +1,8 @@
 <?php
 
-// @codeCoverageIgnoreStart
 App::uses('ModelBehavior', 'Model');
 App::uses('LampagerPaginator', 'Lampager.Model');
 App::uses('LampagerArrayProcessor', 'Lampager.Model');
-// @codeCoverageIgnoreEnd
 
 class LampagerBehavior extends ModelBehavior
 {

@@ -1,8 +1,6 @@
 <?php
 
-// @codeCoverageIgnoreStart
 App::uses('Model', 'Model');
-// @codeCoverageIgnoreEnd
 
 class LampagerColumnAccess
 {

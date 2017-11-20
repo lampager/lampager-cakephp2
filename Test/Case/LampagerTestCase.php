@@ -2,6 +2,6 @@
 
 App::uses('CakeTestCase', 'TestSuite');
 
-class LampagerTestCase extends CakeTestCase
+abstract class LampagerTestCase extends CakeTestCase
 {
 }

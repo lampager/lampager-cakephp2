@@ -1,8 +1,17 @@
 language: php
+
 php:
   - 5.6
   - 7.0
   - 7.1
+
+env:
+  global:
+    - PLUGIN_NAME=Lampager
+    - REQUIRE=
+    - CODECOVERAGE=1
+    - CAKE_REF=2.x
+    - DB=mysql
 
 cache:
   directories:
@@ -10,11 +19,16 @@ cache:
     - $HOME/.composer/cache
 
 before_script:
-  - composer install
-  - mkdir -p build/logs
+  - git clone https://github.com/FriendsOfCake/travis.git --depth 1 ../travis
+  - ../travis/before_script.sh
+  - composer global remove "phpunit/phpunit"
+  - composer global require "phpunit/phpunit:<6.0.0"
+  - echo "require_once '$PWD/vendor/autoload.php';" >> ../cakephp/app/Config/bootstrap.php
 
 script:
-  - vendor/bin/cake test app All --coverage-clover build/logs/clover.xml
+  - ../travis/script.sh
 
 after_success:
+  - mkdir -p build/logs
+  - mv ../cakephp/app/clover.xml build/logs
   - travis_retry php vendor/bin/coveralls

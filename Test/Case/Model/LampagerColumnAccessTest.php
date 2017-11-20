@@ -1,7 +1,7 @@
 <?php
 
-App::uses('LampagerTestCase', 'Test/Case');
-App::uses('LampagerColumnAccess', 'Model');
+App::uses('LampagerTestCase', 'Lampager.Test/Case');
+App::uses('LampagerColumnAccess', 'Lampager.Model');
 
 class LampagerColumnAccessTest extends LampagerTestCase
 {
@@ -10,7 +10,7 @@ class LampagerColumnAccessTest extends LampagerTestCase
 
     /** @var string[] */
     public $fixtures = [
-        'app.Post',
+        'plugin.Lampager.Post',
     ];
 
     public function setUp()

@@ -23,8 +23,5 @@
         "phpunit/phpunit": "<6.0.0",
         "cakephp/cakephp": "^2.10.4",
         "php-coveralls/php-coveralls": "^1.0"
-    },
-    "scripts": {
-        "test": "php -dzend_extension=xdebug.so vendor/cakephp/cakephp/lib/Cake/Console/cake.php -working `pwd` test app All --coverage-html build/logs"
     }
 }

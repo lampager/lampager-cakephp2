@@ -1,9 +1,7 @@
 <?php
 
-// @codeCoverageIgnoreStart
 App::uses('Model', 'Model');
 App::uses('LampagerTransformer', 'Lampager.Model');
-// @codeCoverageIgnoreEnd
 
 use Lampager\Paginator as BasePaginator;
 use Lampager\Query\Order;

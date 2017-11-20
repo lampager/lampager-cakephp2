@@ -1,9 +1,7 @@
 <?php
 
-// @codeCoverageIgnoreStart
 App::uses('Model', 'Model');
 App::uses('LampagerColumnAccess', 'Lampager.Model');
-// @codeCoverageIgnoreEnd
 
 use Lampager\Contracts\Cursor;
 

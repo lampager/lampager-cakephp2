@@ -1,9 +1,7 @@
 <?php
 
-// @codeCoverageIgnoreStart
 App::uses('LampagerArrayCursor', 'Lampager.Model');
 App::uses('LampagerPaginator', 'Lampager.Model');
-// @codeCoverageIgnoreEnd
 
 use Lampager\Cursor;
 use Lampager\Query;

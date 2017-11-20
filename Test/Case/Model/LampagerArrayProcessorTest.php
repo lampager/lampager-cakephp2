@@ -4,12 +4,11 @@ App::uses('CakeRequest', 'Network');
 App::uses('ComponentCollection', 'Controller');
 App::uses('Controller', 'Controller');
 App::uses('PaginatorComponent', 'Controller/Component');
-App::uses('LampagerTestCase', 'Test/Case');
-App::uses('LampagerArrayCursor', 'Model');
-App::uses('LampagerArrayProcessor', 'Model');
+App::uses('LampagerTestCase', 'Lampager.Test/Case');
+App::uses('LampagerArrayCursor', 'Lampager.Model');
+App::uses('LampagerArrayProcessor', 'Lampager.Model');
 
 use Lampager\PaginationResult;
-use Lampager\Query\Order;
 
 class LampagerArrayProcessorTest extends LampagerTestCase
 {
@@ -27,7 +26,7 @@ class LampagerArrayProcessorTest extends LampagerTestCase
 
     /** @var string[] */
     public $fixtures = [
-        'app.Post',
+        'plugin.Lampager.Post',
     ];
 
     public function setUp()
@@ -36,7 +35,7 @@ class LampagerArrayProcessorTest extends LampagerTestCase
 
         // Prepare for ModelBehavior
         $this->Post = ClassRegistry::init('Post');
-        $this->Post->Behaviors->load('Lampager');
+        $this->Post->Behaviors->load('Lampager.Lampager');
 
         // Prepare for PaginatorComponent
         $this->request = new CakeRequest('posts/index');
@@ -53,7 +52,7 @@ class LampagerArrayProcessorTest extends LampagerTestCase
     public function tearDown()
     {
         // Shutdown for ModelBehavior
-        $this->Post->Behaviors->unload('Lampager');
+        $this->Post->Behaviors->unload('Lampager.Lampager');
 
         // Shutdown for PaginatorComponent
         $this->Controller->Components->unload('Paginator');

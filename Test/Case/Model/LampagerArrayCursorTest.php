@@ -1,7 +1,7 @@
 <?php
 
-App::uses('LampagerTestCase', 'Test/Case');
-App::uses('LampagerArrayCursor', 'Model');
+App::uses('LampagerTestCase', 'Lampager.Test/Case');
+App::uses('LampagerArrayCursor', 'Lampager.Model');
 
 class LampagerArrayCursorTest extends LampagerTestCase
 {
@@ -10,7 +10,7 @@ class LampagerArrayCursorTest extends LampagerTestCase
 
     /** @var string[] */
     public $fixtures = [
-        'app.Post',
+        'plugin.Lampager.Post',
     ];
 
     public function setUp()

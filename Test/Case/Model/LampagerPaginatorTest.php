@@ -1,7 +1,7 @@
 <?php
 
-App::uses('LampagerTestCase', 'Test/Case');
-App::uses('LampagerPaginator', 'Model');
+App::uses('LampagerTestCase', 'Lampager.Test/Case');
+App::uses('LampagerPaginator', 'Lampager.Model');
 
 class LampagerPaginatorTest extends LampagerTestCase
 {
@@ -10,7 +10,7 @@ class LampagerPaginatorTest extends LampagerTestCase
 
     /** @var string[] */
     public $fixtures = [
-        'app.Post',
+        'plugin.Lampager.Post',
     ];
 
     public function setUp()
