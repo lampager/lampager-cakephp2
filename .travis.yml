@@ -29,6 +29,7 @@ script:
   - ../travis/script.sh
 
 after_success:
+  - cd ../cakephp/app/Plugin/$PLUGIN_NAME
   - mkdir -p build/logs
-  - mv ../cakephp/app/clover.xml build/logs
-  - travis_retry php vendor/bin/coveralls
+  - mv ../../clover.xml build/logs
+  - travis_retry $TRAVIS_BUILD_DIR/vendor/bin/coveralls
