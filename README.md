@@ -23,6 +23,8 @@ Rapid pagination without using OFFSET
 composer require lampager/lampager-cakephp2:^0.1.1
 ```
 
+Move `Plugin/Lampager` to the appropriate directory if necessary.
+
 ## Basic Usage
 
 Load as a plugin. See [How To Install Plugins - 2.x](https://book.cakephp.org/2.0/en/plugins/how-to-install-plugins.html) for detail.
@@ -30,6 +32,8 @@ Load as a plugin. See [How To Install Plugins - 2.x](https://book.cakephp.org/2.
 Plugin needs to be loaded manually in `app/Config/bootstrap.php`:
 
 ```php
+// Be sure to require vendor/autoload.php beforehand.
+// CakePlugin::load() will fail unless autoloader is properly configured.
 CakePlugin::load('Lampager');
 ```
 

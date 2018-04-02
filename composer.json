@@ -2,6 +2,9 @@
     "name": "lampager/lampager-cakephp2",
     "description": "Rapid pagination for CakePHP 2",
     "type": "cakephp-plugin",
+    "extra": {
+        "installer-name": "Lampager"
+    },
     "license": "MIT",
     "authors": [
         {

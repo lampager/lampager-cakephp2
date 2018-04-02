@@ -23,7 +23,7 @@ before_script:
   - ../travis/before_script.sh
   - composer global remove "phpunit/phpunit"
   - composer global require "phpunit/phpunit:<6.0.0"
-  - echo "require_once '$PWD/vendor/autoload.php';" >> ../cakephp/app/Config/bootstrap.php
+  - echo "require_once __DIR__ . '/../vendor/autoload.php';" >> ../cakephp/app/Config/bootstrap.php
 
 script:
   - ../travis/script.sh
