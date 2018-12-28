@@ -79,7 +79,7 @@ class LampagerBehavior extends ModelBehavior
          */
         extract($extra, EXTR_SKIP);
 
-        return $model->find('lampager', compact(
+        return $model->find('lampager', compact(array_intersect([
             'conditions',
             'fields',
             'order',
@@ -92,7 +92,7 @@ class LampagerBehavior extends ModelBehavior
             'inclusive',
             'seekable',
             'unseekable',
-            'cursor'
-        ));
+            'cursor',
+        ], array_keys(get_defined_vars()))));
     }
 }
