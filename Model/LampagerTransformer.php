@@ -36,8 +36,8 @@ class LampagerTransformer
             // Compiled by static::compileLimit
             'limit' => null,
 
-            // Compiled by static::compileOrderBy
-            'order' => null,
+            // Sort the result set
+            'order' => $this->compileOrderBy($query->selectOrUnionAll()),
 
             // Used along with ArrayProcessor
             'config' => $query,
@@ -99,7 +99,7 @@ class LampagerTransformer
         $model = $this->paginator->builder;
         $query = $this->paginator->query;
 
-        /** @var DboSource */
+        /** @var DboSource $db */
         $db = $model->getDataSource();
 
         return $db->buildStatement([
@@ -144,11 +144,25 @@ class LampagerTransformer
     }
 
     /**
-     * @param  Select   $select
+     * @param  SelectOrUnionAll $selectOrUnionAll
      * @return string[]
      */
-    protected function compileOrderBy(Select $select)
+    protected function compileOrderBy(SelectOrUnionAll $selectOrUnionAll)
     {
+        /** @var Select $select */
+        if ($selectOrUnionAll instanceof Select) {
+            $select = $selectOrUnionAll;
+        }
+        if ($selectOrUnionAll instanceof UnionAll) {
+            $select = $selectOrUnionAll->mainQuery();
+        }
+
+        // @codeCoverageIgnoreStart
+        if (!isset($select)) {
+            throw new \LogicException('Unreachable here');
+        }
+        // @codeCoverageIgnoreEnd
+
         $orders = [];
         foreach ($select->orders() as $order) {
             $orders[$order->column()] = $order->order();
