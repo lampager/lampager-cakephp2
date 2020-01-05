@@ -42,7 +42,7 @@ after_success:
   - cd ../cakephp/app/Plugin/$PLUGIN_NAME
   - mkdir -p build/logs
   - mv ../../clover.xml build/logs
-  - travis_retry ../../vendor/bin/coveralls
+  - travis_retry ../../vendor/bin/php-coveralls
 
 notifications:
   webhooks: https://coveralls.io/webhook
