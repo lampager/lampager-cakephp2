@@ -62,6 +62,7 @@ way described in the Cookbook: [Pagination][]. Note the options that are
 specific to Lampager such as `forward`, `seekable`, or `cursor`.
 
 ```php
+/** @var \Lampager\PaginationResult $posts */
 $posts = $this->paginate(Post::class, [
     // Lampager options
     'forward' => true,
@@ -275,7 +276,7 @@ class PostsController extends AppController
             'limit' => 10,
         ];
 
-        /** @var mixed[][] */
+        /** @var \Lampager\PaginationResult $posts */
         $posts = $this->Paginator->paginate(Post::class);
         $this->set('posts', $posts);
     }
