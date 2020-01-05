@@ -22,8 +22,6 @@ class LampagerPaginatorTest extends LampagerTestCase
     /**
      * Test LampagerPaginator::order
      *
-     * @param array $query
-     * @param array $expected
      * @dataProvider queryProvider
      */
     public function testFromQuery(array $query, array $expected)
@@ -59,7 +57,7 @@ class LampagerPaginatorTest extends LampagerTestCase
                 'backward' => true,
                 'exclusive' => true,
                 'seekable' => true,
-            ]
+            ],
         ];
 
         yield 'Order by Model.column order' => [
@@ -82,7 +80,7 @@ class LampagerPaginatorTest extends LampagerTestCase
                 'backward' => true,
                 'exclusive' => true,
                 'seekable' => true,
-            ]
+            ],
         ];
 
         yield 'Order by column => order' => [
@@ -105,7 +103,7 @@ class LampagerPaginatorTest extends LampagerTestCase
                 'backward' => true,
                 'exclusive' => true,
                 'seekable' => true,
-            ]
+            ],
         ];
 
         yield 'Order by column order' => [
@@ -128,7 +126,7 @@ class LampagerPaginatorTest extends LampagerTestCase
                 'backward' => true,
                 'exclusive' => true,
                 'seekable' => true,
-            ]
+            ],
         ];
     }
 }

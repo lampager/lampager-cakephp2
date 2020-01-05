@@ -33,6 +33,9 @@ class LampagerArrayProcessorTest extends LampagerTestCase
     {
         parent::setUp();
 
+        /** @var ComponentCollection&PHPUnit_Framework_MockObject_MockObject */
+        $collection = $this->createMock(ComponentCollection::class);
+
         // Prepare for ModelBehavior
         $this->Post = ClassRegistry::init('Post');
         $this->Post->Behaviors->load('Lampager.Lampager');
@@ -45,7 +48,7 @@ class LampagerArrayProcessorTest extends LampagerTestCase
         $this->Controller = new Controller($this->request);
         $this->Controller->Post = $this->Post;
 
-        $this->Paginator = new PaginatorComponent($this->getMock(ComponentCollection::class), []);
+        $this->Paginator = new PaginatorComponent($collection, []);
         $this->Paginator->Controller = $this->Controller;
     }
 
@@ -63,7 +66,6 @@ class LampagerArrayProcessorTest extends LampagerTestCase
     /**
      * Test LampagerArrayProcessor::process by custom finder
      *
-     * @param array $query
      * @param mixed $expected
      * @dataProvider processProvider
      */
@@ -77,7 +79,6 @@ class LampagerArrayProcessorTest extends LampagerTestCase
     /**
      * Test LampagerArrayProcessor::process by PaginatorComponent
      *
-     * @param array $query
      * @param mixed $expected
      * @dataProvider processProvider
      */
@@ -759,7 +760,7 @@ class LampagerArrayProcessorTest extends LampagerTestCase
             ],
         ];
 
-        yield 'Descending backward exlusive' => [
+        yield 'Descending backward exclusive' => [
             [
                 'backward' => true,
                 'seekable' => true,

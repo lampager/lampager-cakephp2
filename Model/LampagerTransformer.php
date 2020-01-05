@@ -4,12 +4,11 @@ App::uses('LampagerArrayCursor', 'Lampager.Model');
 App::uses('LampagerPaginator', 'Lampager.Model');
 App::uses('Sqlite', 'Model/Datasource/Database');
 
-use Lampager\Cursor;
 use Lampager\Query;
+use Lampager\Query\ConditionGroup;
 use Lampager\Query\Select;
 use Lampager\Query\SelectOrUnionAll;
 use Lampager\Query\UnionAll;
-use Lampager\Query\ConditionGroup;
 
 class LampagerTransformer
 {
@@ -25,7 +24,7 @@ class LampagerTransformer
      * Transform Query to CakePHP query.
      *
      * @param  Query $query Query.
-     * @return array        Options for Model::find.
+     * @return array Options for Model::find.
      */
     public function transform(Query $query)
     {
@@ -63,8 +62,8 @@ class LampagerTransformer
     /**
      * Build query from the cursor.
      *
-     * @param  Cursor|int[]|string[] $cursor Cursor.
-     * @return array                         Options for Model::find.
+     * @param  int[]|string[] $cursor Cursor.
+     * @return array          Options for Model::find.
      */
     public function build($cursor = [])
     {
@@ -72,7 +71,7 @@ class LampagerTransformer
     }
 
     /**
-     * @param  SelectOrUnionAll $selectOrUnionAll
+     * @param  Select|UnionAll $selectOrUnionAll
      * @return string
      */
     protected function compileSelectOrUnionAll(SelectOrUnionAll $selectOrUnionAll)
@@ -98,7 +97,6 @@ class LampagerTransformer
     }
 
     /**
-     * @param  Select $select
      * @return string
      */
     protected function compileSelect(Select $select)
@@ -125,7 +123,6 @@ class LampagerTransformer
     }
 
     /**
-     * @param  Select   $select
      * @return string[]
      */
     protected function compileWhere(Select $select)
@@ -138,7 +135,6 @@ class LampagerTransformer
     }
 
     /**
-     * @param  ConditionGroup     $group
      * @return \Generator<string,string>
      */
     protected function compileWhereGroup(ConditionGroup $group)
@@ -151,24 +147,17 @@ class LampagerTransformer
     }
 
     /**
-     * @param  SelectOrUnionAll $selectOrUnionAll
+     * @param  Select|UnionAll $selectOrUnionAll
      * @return string[]
      */
     protected function compileOrderBy(SelectOrUnionAll $selectOrUnionAll)
     {
-        /** @var Select $select */
         if ($selectOrUnionAll instanceof Select) {
             $select = $selectOrUnionAll;
         }
         if ($selectOrUnionAll instanceof UnionAll) {
             $select = $selectOrUnionAll->mainQuery();
         }
-
-        // @codeCoverageIgnoreStart
-        if (!isset($select)) {
-            throw new \LogicException('Unreachable here');
-        }
-        // @codeCoverageIgnoreEnd
 
         $orders = [];
         foreach ($select->orders() as $order) {
@@ -178,7 +167,6 @@ class LampagerTransformer
     }
 
     /**
-     * @param  Select $select
      * @return int
      */
     protected function compileLimit(Select $select)

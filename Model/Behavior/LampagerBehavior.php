@@ -55,14 +55,12 @@ class LampagerBehavior extends ModelBehavior
     /**
      * Paginate the Model. Only called by PaginatorComponent::paginate().
      *
-     * @param Model $model
      * @param array $conditions
      * @param array $fields
      * @param array $order
      * @param int   $limit
      * @param int   $page
      * @param int   $recursive
-     * @param array $extra
      */
     public function paginate(Model $model, $conditions, $fields, $order, $limit, $page = 1, $recursive = null, array $extra = [])
     {

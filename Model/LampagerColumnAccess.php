@@ -15,7 +15,6 @@ class LampagerColumnAccess
     /**
      * Return a value indicating whether the data has any value whose field mathes the column.
      *
-     * @param  array  $data
      * @param  string $column
      * @return bool
      */
@@ -31,7 +30,6 @@ class LampagerColumnAccess
     /**
      * Get a value from the data by the column.
      *
-     * @param  array  $data
      * @param  string $column
      * @return mixed
      */
@@ -83,7 +81,6 @@ class LampagerColumnAccess
     /**
      * Iterate through the data with flatten field name
      *
-     * @param  array $data
      * @return \Generator
      */
     public function iterate(array $data)

@@ -25,8 +25,8 @@ class LampagerPaginator extends BasePaginator
     }
 
     /**
-     * @param  Model             $builder Model.
-     * @param  array             $query   Query.
+     * @param  Model  $builder Model.
+     * @param  array  $query   Query.
      * @return static
      */
     public static function create(Model $builder, array $query)
@@ -37,7 +37,7 @@ class LampagerPaginator extends BasePaginator
     /**
      * Add cursor parameter name for ORDER BY statement.
      *
-     * @param  string|int $column
+     * @param  int|string $column
      * @param  string     $order
      * @return $this
      */

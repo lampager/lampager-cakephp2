@@ -22,7 +22,6 @@ class LampagerArrayCursorTest extends LampagerTestCase
     /**
      * Test LampagerArrayCursor::get
      *
-     * @param array  $data
      * @param string $column
      * @param mixed  $expected
      * @dataProvider getProvider
@@ -36,7 +35,6 @@ class LampagerArrayCursorTest extends LampagerTestCase
     /**
      * Test LampagerArrayCursor::has
      *
-     * @param array  $data
      * @param string $column
      * @param mixed  $expected
      * @dataProvider hasProvider

@@ -22,7 +22,6 @@ class LampagerColumnAccessTest extends LampagerTestCase
     /**
      * Test LampagerColumnAccess::get
      *
-     * @param array  $data
      * @param string $column
      * @param mixed  $expected
      * @dataProvider getProvider
@@ -36,7 +35,6 @@ class LampagerColumnAccessTest extends LampagerTestCase
     /**
      * Test LampagerColumnAccess::has
      *
-     * @param array  $data
      * @param string $column
      * @param mixed  $expected
      * @dataProvider hasProvider
@@ -64,7 +62,6 @@ class LampagerColumnAccessTest extends LampagerTestCase
     /**
      * Test LampagerColumnAccess::with
      *
-     * @param array $data
      * @param mixed $expected
      * @dataProvider iterateProvider
      */
