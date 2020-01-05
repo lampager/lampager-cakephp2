@@ -1,7 +1,7 @@
 <?php
 
-App::uses('LampagerTestCase', 'Lampager.Test/Case');
 App::uses('LampagerArrayCursor', 'Lampager.Model');
+App::uses('LampagerTestCase', 'Lampager.Test/Case');
 
 class LampagerArrayCursorTest extends LampagerTestCase
 {

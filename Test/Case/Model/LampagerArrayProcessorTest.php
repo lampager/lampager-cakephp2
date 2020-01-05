@@ -4,9 +4,8 @@ App::uses('CakeRequest', 'Network');
 App::uses('ComponentCollection', 'Controller');
 App::uses('Controller', 'Controller');
 App::uses('PaginatorComponent', 'Controller/Component');
+App::uses('LampagerPaginator', 'Lampager.Model');
 App::uses('LampagerTestCase', 'Lampager.Test/Case');
-App::uses('LampagerArrayCursor', 'Lampager.Model');
-App::uses('LampagerArrayProcessor', 'Lampager.Model');
 
 use Lampager\PaginationResult;
 
@@ -61,6 +60,20 @@ class LampagerArrayProcessorTest extends LampagerTestCase
         $this->Controller->Components->unload('Paginator');
 
         parent::tearDown();
+    }
+
+    /**
+     * Test LampagerArrayProcessor::process by LampagerPaginator::paginate
+     *
+     * @param mixed $expected
+     * @dataProvider processProvider
+     */
+    public function testPaginate(array $query, $expected)
+    {
+        $cursor = isset($query['cursor']) ? $query['cursor'] : [];
+        $actual = LampagerPaginator::create($this->Post, $query)->paginate($cursor);
+        $this->assertInstanceOf(PaginationResult::class, $actual);
+        $this->assertSame($expected, (array)$actual);
     }
 
     /**

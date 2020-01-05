@@ -1,9 +1,14 @@
 <?php
 
 App::uses('Model', 'Model');
+App::uses('LampagerArrayCursor', 'Lampager.Model');
+App::uses('LampagerArrayProcessor', 'Lampager.Model');
 App::uses('LampagerTransformer', 'Lampager.Model');
 
+use Lampager\ArrayProcessor;
+use Lampager\PaginationResult;
 use Lampager\Paginator as BasePaginator;
+use Lampager\Query;
 use Lampager\Query\Order;
 
 class LampagerPaginator extends BasePaginator
@@ -12,26 +17,29 @@ class LampagerPaginator extends BasePaginator
     public $builder;
 
     /** @var array */
-    public $query;
+    public $options;
+
+    /** @var ArrayProcessor */
+    public $processor;
 
     /** @var LampagerTransformer */
     public $transformer;
 
-    public function __construct(Model $builder, array $query)
+    public function __construct(Model $builder, array $options)
     {
         $this->builder = $builder;
-        $this->fromArray($query);
-        $this->transformer = new LampagerTransformer($this);
+        $this->fromArray($options);
+
+        $this->processor = new LampagerArrayProcessor($builder);
+        $this->transformer = new LampagerTransformer($builder, $options);
     }
 
     /**
-     * @param  Model  $builder Model.
-     * @param  array  $query   Query.
      * @return static
      */
-    public static function create(Model $builder, array $query)
+    public static function create(Model $builder, array $options)
     {
-        return new static($builder, $query);
+        return new static($builder, $options);
     }
 
     /**
@@ -63,8 +71,8 @@ class LampagerPaginator extends BasePaginator
         // Not supported in CakePHP 2 version
         unset($options['orders']);
 
-        // Merge with existing query
-        $this->query = array_replace_recursive($this->query ?: [], $options);
+        // Merge with existing options
+        $this->options = array_replace_recursive($this->options ?: [], $options);
 
         if (isset($options['order'])) {
             foreach ($options['order'] as $column => $order) {
@@ -73,5 +81,37 @@ class LampagerPaginator extends BasePaginator
         }
 
         return parent::fromArray($options);
+    }
+
+    /**
+     * Transform Query to CakePHP query.
+     *
+     * @param  Query $query Query.
+     * @return array Options for Model::find.
+     */
+    public function transform(Query $query)
+    {
+        return $this->transformer->transform($query);
+    }
+
+    /**
+     * Build query from the cursor.
+     *
+     * @param  int[]|string[] $cursor Cursor.
+     * @return array          Options for Model::find.
+     */
+    public function build(array $cursor = [])
+    {
+        return $this->transform($this->configure(new LampagerArrayCursor($this->builder, $cursor)));
+    }
+
+    /**
+     * @param  int[]|string[]   $cursor Cursor.
+     * @return PaginationResult Result.
+     */
+    public function paginate(array $cursor = [])
+    {
+        $query = $this->configure(new LampagerArrayCursor($this->builder, $cursor));
+        return $this->processor->process($query, $this->builder->find('all', $this->transform($query)));
     }
 }

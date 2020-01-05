@@ -1,5 +1,6 @@
 <?php
 
+App::uses('CakePlugin', 'Core');
 App::uses('CakeTestSuite', 'TestSuite');
 
 class AllLampagerTest extends CakeTestSuite

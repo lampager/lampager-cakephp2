@@ -1,6 +1,5 @@
 <?php
 
-App::uses('LampagerArrayCursor', 'Lampager.Model');
 App::uses('LampagerPaginator', 'Lampager.Model');
 App::uses('Sqlite', 'Model/Datasource/Database');
 
@@ -12,23 +11,25 @@ use Lampager\Query\UnionAll;
 
 class LampagerTransformer
 {
-    /** @var LampagerPaginator */
-    protected $paginator;
+    /** @var Model */
+    protected $builder;
 
-    public function __construct(LampagerPaginator $paginator)
+    /** @var array */
+    protected $options;
+
+    public function __construct(Model $builder, array $options)
     {
-        $this->paginator = $paginator;
+        $this->builder = $builder;
+        $this->options = $options;
     }
 
     /**
      * Transform Query to CakePHP query.
      *
-     * @param  Query $query Query.
      * @return array Options for Model::find.
      */
     public function transform(Query $query)
     {
-        $model = $this->paginator->builder;
         return [
             // Compiled by static::compileSelect
             'conditions' => null,
@@ -50,24 +51,13 @@ class LampagerTransformer
                         'table' => $this->compileSelectOrUnionAll($query->selectOrUnionAll()),
                         'alias' => LampagerPaginator::class,
                         'conditions' => [
-                            LampagerPaginator::class . ".{$model->primaryKey} = {$model->alias}.{$model->primaryKey}",
+                            LampagerPaginator::class . ".{$this->builder->primaryKey} = {$this->builder->alias}.{$this->builder->primaryKey}",
                         ],
                     ],
                 ],
-                $this->paginator->query['joins'] ?: []
+                isset($this->options['joins']) ? $this->options['joins'] : []
             ),
-        ] + $this->paginator->query;
-    }
-
-    /**
-     * Build query from the cursor.
-     *
-     * @param  int[]|string[] $cursor Cursor.
-     * @return array          Options for Model::find.
-     */
-    public function build($cursor = [])
-    {
-        return $this->transform($this->paginator->configure(new LampagerArrayCursor($this->paginator->builder, $cursor)));
+        ] + $this->options;
     }
 
     /**
@@ -84,7 +74,7 @@ class LampagerTransformer
             $supportQuery = $this->compileSelect($selectOrUnionAll->supportQuery());
             $mainQuery = $this->compileSelect($selectOrUnionAll->mainQuery());
 
-            if ($this->paginator->builder->getDataSource() instanceof Sqlite) {
+            if ($this->builder->getDataSource() instanceof Sqlite) {
                 return '(SELECT * FROM (' . $supportQuery . ') UNION ALL SELECT * FROM (' . $mainQuery . '))';
             }
 
@@ -101,25 +91,22 @@ class LampagerTransformer
      */
     protected function compileSelect(Select $select)
     {
-        $model = $this->paginator->builder;
-        $query = $this->paginator->query;
-
         /** @var DboSource $db */
-        $db = $model->getDataSource();
+        $db = $this->builder->getDataSource();
 
         return $db->buildStatement([
             'limit' => $this->compileLimit($select),
             'order' => $this->compileOrderBy($select),
             'conditions' => array_merge_recursive(
                 $this->compileWhere($select),
-                $query['conditions'] ?: []
+                isset($this->options['conditions']) ? $this->options['conditions'] : []
             ),
-            'alias' => $model->alias,
-            'table' => $db->fullTableName($model),
+            'alias' => $this->builder->alias,
+            'table' => $db->fullTableName($this->builder),
             'fields' => [
-                $db->name("{$model->alias}.{$model->primaryKey}"),
+                $db->name("{$this->builder->alias}.{$this->builder->primaryKey}"),
             ],
-        ], $model);
+        ], $this->builder);
     }
 
     /**

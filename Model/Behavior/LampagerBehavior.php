@@ -44,7 +44,7 @@ class LampagerBehavior extends ModelBehavior
 
     protected function findLampagerBefore(Model $model, array $query = [], array $results = [])
     {
-        return LampagerPaginator::create($model, $query)->transformer->build(isset($query['cursor']) ? $query['cursor'] : []);
+        return LampagerPaginator::create($model, $query)->build(isset($query['cursor']) ? $query['cursor'] : []);
     }
 
     protected function findLampagerAfter(Model $model, array $query = [], array $results = [])

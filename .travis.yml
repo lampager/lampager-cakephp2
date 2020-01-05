@@ -16,6 +16,7 @@ env:
     - REQUIRE=
     - CODECOVERAGE=1
     - CAKE_REF=2.x
+    - COVERALLS_PARALLEL=true
   jobs:
     - DB=mysql
     - DB=pgsql
@@ -41,4 +42,7 @@ after_success:
   - cd ../cakephp/app/Plugin/$PLUGIN_NAME
   - mkdir -p build/logs
   - mv ../../clover.xml build/logs
-  - travis_retry $TRAVIS_BUILD_DIR/vendor/bin/coveralls
+  - travis_retry ../../vendor/bin/coveralls
+
+notifications:
+  webhooks: https://coveralls.io/webhook
