@@ -2,6 +2,7 @@
 
 App::uses('LampagerArrayCursor', 'Lampager.Model');
 App::uses('LampagerPaginator', 'Lampager.Model');
+App::uses('Sqlite', 'Model/Datasource/Database');
 
 use Lampager\Cursor;
 use Lampager\Query;
@@ -79,10 +80,16 @@ class LampagerTransformer
         if ($selectOrUnionAll instanceof Select) {
             return '(' . $this->compileSelect($selectOrUnionAll) . ')';
         }
+
         if ($selectOrUnionAll instanceof UnionAll) {
             $supportQuery = $this->compileSelect($selectOrUnionAll->supportQuery());
             $mainQuery = $this->compileSelect($selectOrUnionAll->mainQuery());
-            return '(SELECT * FROM (' . $supportQuery . ') q UNION ALL SELECT * FROM (' . $mainQuery . ') q)';
+
+            if ($this->paginator->builder->getDataSource() instanceof Sqlite) {
+                return '(SELECT * FROM (' . $supportQuery . ') UNION ALL SELECT * FROM (' . $mainQuery . '))';
+            }
+
+            return '((' . $supportQuery . ') UNION ALL (' . $mainQuery . '))';
         }
 
         // @codeCoverageIgnoreStart
@@ -112,7 +119,7 @@ class LampagerTransformer
             'alias' => $model->alias,
             'table' => $db->fullTableName($model),
             'fields' => [
-                "{$model->alias}.{$model->primaryKey}",
+                $db->name("{$model->alias}.{$model->primaryKey}"),
             ],
         ], $model);
     }
