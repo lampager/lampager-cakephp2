@@ -17,7 +17,11 @@ Rapid pagination without using OFFSET
 - CakePHP: ^2.10
 - [lampager/lampager][]: ^0.4
 
-Note: [lampager/lampager-cakephp][] for CakePHP 3.x is available!
+### Note
+
+- For CakePHP 2.x, use lampager/lampager-cakephp2 (this version).
+- For CakePHP 3.x, use [lampager/lampager-cakephp v1.x][].
+- For CakePHP 4.x, use [lampager/lampager-cakephp v2.x][].
 
 ## Installing
 
@@ -315,8 +319,9 @@ Supported!
 
 Not supported.
 
-[lampager/lampager]:         https://github.com/lampager/lampager
-[lampager/lampager-cakephp]: https://github.com/lampager/lampager-cakephp
-[How To Install Plugins]:    https://book.cakephp.org/2/en/plugins/how-to-install-plugins.html
-[Pagination]:                https://book.cakephp.org/2/en/core-libraries/components/pagination.html
-[Retrieving Your Data]:      https://book.cakephp.org/2/en/models/retrieving-your-data.html#creating-custom-find-types
+[lampager/lampager]:              https://github.com/lampager/lampager
+[lampager/lampager-cakephp v1.x]: https://github.com/lampager/lampager-cakephp/tree/v1.x
+[lampager/lampager-cakephp v2.x]: https://github.com/lampager/lampager-cakephp
+[How To Install Plugins]:         https://book.cakephp.org/2/en/plugins/how-to-install-plugins.html
+[Pagination]:                     https://book.cakephp.org/2/en/core-libraries/components/pagination.html
+[Retrieving Your Data]:           https://book.cakephp.org/2/en/models/retrieving-your-data.html#creating-custom-find-types
